@@ -28,6 +28,7 @@ import java.io.File;
 import java.io.IOException;
 import java.lang.reflect.Field;
 import java.nio.charset.Charset;
+import java.nio.charset.StandardCharsets;
 import java.util.Collection;
 import java.util.Map;
 import java.util.Optional;
@@ -235,7 +236,7 @@ public class UndertowAppServer implements DeployableContainer<UndertowAppServerC
         }
         try (InputStream stream = archive.get("/WEB-INF/web.xml").getAsset().openStream()) {
             return 
-              IOUtils.toString(stream, Charset.forName("UTF-8"))
+              IOUtils.toString(stream, String.valueOf(StandardCharsets.UTF_8))
                     .contains(Application.class.getName());
         } catch (IOException e) {
             throw new DeploymentException("Unable to read archive.", e);

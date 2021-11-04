@@ -16,6 +16,7 @@
  */
 package org.keycloak.services.resources.admin;
 
+import org.apache.http.util.TextUtils;
 import org.jboss.logging.Logger;
 import org.jboss.resteasy.annotations.cache.NoCache;
 import org.jboss.resteasy.spi.ResteasyProviderFactory;
@@ -129,6 +130,15 @@ public class UsersResource {
                 throw exception;
             }
         }
+
+        logger.info("Custom create user executed ...");
+
+        // validate if groups and email has been set ...
+        if (TextUtils.isBlank(rep.getEmail()) ||
+                rep.getGroups() == null || rep.getGroups().isEmpty()) {
+            return ErrorResponse.error("Email and group(s) cannot be empty", Response.Status.BAD_REQUEST);
+        }
+
 
         String username = rep.getUsername();
         if(realm.isRegistrationEmailAsUsername()) {
